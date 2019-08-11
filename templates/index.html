@@ -1,0 +1,105 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/font-awsome.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/fontawesome.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/poper.min.js"></script>
+    <script type="text/javascript">
+        list_sentence = JSON.parse({{ list_sentence | tojson }})
+        length = list_sentence.length
+        function call_counter(id, value){
+                $.ajax({
+                    url : `/counter/${id}/${value}`,
+                    type : "post",
+                    dataType:"text",
+                    success : function (result){
+                        console.log('success')
+                    }
+                });
+            }
+        $(function () {
+            $(document).tooltip();
+        });
+        $(document).ready(function () {
+            index = 0;
+            $(".card").html(`
+                <div class="txt_japanese" title="${list_sentence[0].vietnamese}">
+                    ${list_sentence[0].japanese}
+                </div>
+                <div class="txt_romaji">
+                    ${list_sentence[0].romaji}
+                </div>
+                <div class="txt_counter">Number: ${list_sentence[0].counter}</div>
+            `);
+            $(".btn_forgot").click(function () {
+                console.log('btn_forgot')
+                call_counter(list_sentence[index].id,-1)
+            });
+            $(".btn_remember").click(function () {
+                call_counter(list_sentence[index].id, 1)
+                console.log('btn_remember')
+            });
+            $(".icon_left").click(function () {
+                index = Math.floor(Math.random() * length);  
+                $(".card").html(`
+                    <div class="txt_japanese" title="${list_sentence[index].vietnamese}">
+                        ${list_sentence[index].japanese}
+                    </div>
+                    <div class="txt_romaji">
+                        ${list_sentence[index].romaji}
+                    </div>
+                    <div class="txt_counter">Number: ${list_sentence[index].counter}</div>
+                `)
+                console.log('icon_left')
+            });
+            $(".icon_right").click(function () {
+                index = Math.floor(Math.random() * length);  
+                $(".card").html(`
+                    <div class="txt_japanese" title="${list_sentence[index].vietnamese}">
+                        ${list_sentence[index].japanese}
+                    </div>
+                    <div class="txt_romaji">
+                        ${list_sentence[index].romaji}
+                    </div>
+                    <div class="txt_counter">Number: ${list_sentence[index].counter}</div>
+                `)
+                console.log('icon_right')
+            })
+        });
+
+    </script>
+    <title>Learnning Japanese</title>
+</head>
+
+<body>
+    <div class="wrapper table-bordered">
+        <div class="shadow-sm bg-white card">
+            
+        </div>
+        
+        <div class="play row">
+            <div class="couter col-md-6">
+                <div class=" btn btn-primary btn_remember">Remember this</div>
+                <div class=" btn btn-dark btn_forgot">Forgot</div>
+            </div>
+            <div class="btn btn-dark icon_left col-md-2" style=" margin-right: 15px;">
+                <i class="fas fa-caret-left " style="font-size: 90px;"></i>
+            </div>
+            <div class="btn btn-dark icon_right col-md-2" style="font-size: 90px">
+                <i class="fas fa-caret-right "></i>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
